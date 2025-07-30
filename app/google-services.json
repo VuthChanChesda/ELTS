@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "77217853273",
+    "project_id": "eltsproject",
+    "storage_bucket": "eltsproject.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:77217853273:android:4144b5e45cd77d9ae9a648",
+        "android_client_info": {
+          "package_name": "com.elts"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-_fQe33c2kKDDETLwYTvylDoIj1aYSb4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">ELTS</string>
+    <string name="done">DONE</string>
+    <string name="didn_t_receive_the_otp_resend_otp">Didn\'t receive the OTP? Resend OTP</string>
+    <string name="enter_the_otp_nwe_sent_you_on_the_following_email">Enter the OTP\nwe sent you on the following email :</string>
+    <string name="please_enter_your_email_to_sign_in">Please enter your email to sign in</string>
+    <string name="welcome_to_idp_ielts">Welcome to IDP IELTS</string>
+    <string name="email_address">Email address</string>
+    <string name="password">Password</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="achieve_your_work_study_and_migration_goals_with_ielts">Achieve your work, study and migration goals with IELTS</string>
+</resources>
