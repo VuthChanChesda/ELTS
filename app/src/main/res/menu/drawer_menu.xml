@@ -1,0 +1,35 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group>
+        <item
+            android:title="@string/account">
+            <menu>
+                <item
+                    android:id="@+id/nav_home"
+                    android:title="@string/manage_account"
+                    android:icon="@drawable/account_settings_svgrepo_com" />
+                <item
+                    android:id="@+id/nav_profile"
+                    android:title="@string/contact_us"
+                    android:icon="@drawable/contact_us_svgrepo_com" />
+            </menu>
+        </item>
+    </group>
+
+    <item
+        android:title="@string/login">
+        <menu>
+            <item
+                android:id="@+id/nav_logout"
+                android:title="Logout"
+                android:icon="@drawable/logoutsvg" />
+<!--            <item-->
+<!--                android:id="@+id/nav_login"-->
+<!--                android:title="@string/results"-->
+<!--                android:icon="@drawable/loginsvg" />-->
+        </menu>
+    </item>
+
+</menu>
