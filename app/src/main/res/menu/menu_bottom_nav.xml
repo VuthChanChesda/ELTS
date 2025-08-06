@@ -16,6 +16,11 @@
         android:icon="@drawable/check_education_exam_svgrepo_com"
         android:id="@+id/menu_results">
     </item>
+    <item
+        android:title="@string/account_icon"
+        android:icon="@drawable/check_education_exam_svgrepo_com"
+        android:id="@+id/menu_account">
+    </item>
 
 
 </menu>

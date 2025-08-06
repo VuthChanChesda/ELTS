@@ -1,10 +1,16 @@
 package com.elts
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.elts.models.Article
+import com.google.firebase.firestore.FirebaseFirestore
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,6 +27,11 @@ class ExploreFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var articleList: MutableList<Article>
+    private lateinit var articleAdapter: ArticleAdapter
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -33,9 +44,47 @@ class ExploreFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_explore, container, false)
+
+
+        val view = inflater.inflate(R.layout.fragment_explore, container, false)
+
+        // RecyclerView setup
+        recyclerView = view.findViewById(R.id.recyclerArticles) // Make sure your XML has this ID
+        recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+
+        articleList = mutableListOf()
+        articleAdapter = ArticleAdapter(articleList) { article ->
+            // Launch detail screen when item is clicked
+            val intent = Intent(requireContext(), ArticleDetailActivity::class.java)
+            intent.putExtra("title", article.title)
+            intent.putExtra("content", article.content)
+            intent.putExtra("date", article.date)
+            intent.putExtra("description", article.description)
+            startActivity(intent)
+        }
+
+        recyclerView.adapter = articleAdapter
+
+        // Load from Firebase
+        val db = FirebaseFirestore.getInstance()
+        db.collection("articles")
+            .get()
+            .addOnSuccessListener { snapshot ->
+                articleList.clear()
+                for (document in snapshot) {
+                    val article = document.toObject(Article::class.java)
+                    articleList.add(article)
+                }
+                articleAdapter.notifyDataSetChanged()
+            }
+            .addOnFailureListener { exception ->
+                Log.e("Firestore", "Error loading articles", exception)
+            }
+
+
+        return view
     }
+
 
     companion object {
         /**
