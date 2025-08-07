@@ -50,6 +50,9 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging) // if you're using logging
 
+    implementation(libs.androidx.core.splashscreen)
+
+
 
 
     implementation(libs.androidx.core.ktx)

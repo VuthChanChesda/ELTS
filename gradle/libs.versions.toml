@@ -18,6 +18,8 @@ firebaseFirestore = "26.0.0"
 navigationFragmentKtx = "2.9.3"
 navigationUiKtx = "2.9.3"
 firebase-bom = "32.7.0"
+splashscreen = "1.0.1"
+
 
 
 
@@ -43,6 +45,8 @@ androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navi
 androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigationUiKtx" }
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }
 firebase-database = { group = "com.google.firebase", name = "firebase-database-ktx" }
+androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashscreen" }
+
 
 
 [plugins]

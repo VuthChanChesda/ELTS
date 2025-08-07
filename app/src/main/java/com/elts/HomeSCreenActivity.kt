@@ -1,5 +1,6 @@
 package com.elts
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +10,7 @@ import androidx.navigation.ui.NavigationUI
 import com.elts.databinding.ActivityHomeScreenBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.navigation.findNavController
+import com.google.firebase.auth.FirebaseAuth
 
 
 class HomeSCreenActivity : AppCompatActivity() {
