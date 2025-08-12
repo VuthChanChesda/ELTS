@@ -165,7 +165,6 @@
             android:textAllCaps="false"
             android:textSize="16sp"
             android:fontFamily="sans-serif-medium"
-            android:elevation="4dp"
-            android:cornerRadius="8dp" />
+            android:elevation="4dp" />
     </LinearLayout>
 </layout>

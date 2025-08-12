@@ -44,10 +44,7 @@ class ExploreFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-
         val view = inflater.inflate(R.layout.fragment_explore, container, false)
-
         // RecyclerView setup
         recyclerView = view.findViewById(R.id.recyclerArticles) // Make sure your XML has this ID
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -80,7 +77,6 @@ class ExploreFragment : Fragment() {
             .addOnFailureListener { exception ->
                 Log.e("Firestore", "Error loading articles", exception)
             }
-
 
         return view
     }

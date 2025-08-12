@@ -27,8 +27,10 @@ class SplashActivity : ComponentActivity() {
             val user = FirebaseAuth.getInstance().currentUser
             if (user != null) {
                 startActivity(Intent(this, HomeSCreenActivity::class.java))
+
             } else {
                 startActivity(Intent(this, MainActivity::class.java))
+
             }
             finish()
         }, 5000) // 2000 milliseconds = 2 seconds
