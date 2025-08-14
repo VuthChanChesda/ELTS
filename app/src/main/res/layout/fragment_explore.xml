@@ -2,9 +2,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:background="@android:color/white"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     tools:context=".ExploreFragment">
+
+    <!-- Colored header background -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="125dp"
+        android:background="@color/primary_color" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -14,140 +20,158 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:orientation="vertical">
 
-            <!-- Greeting -->
-            <TextView
-                android:text="Hello Vbbh,"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:layout_marginTop="15dp"
-                android:textColor="#D50032"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:text="Achieve more with IELTS"
-                android:textColor="#777777"
-                android:layout_marginBottom="24dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <!-- Prepare for IELTS Card -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp">
-
+            <!-- Header content -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
-
-                <ImageView
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:src="@drawable/book_stack"
-                    android:layout_marginBottom="8dp" />
+                android:paddingEnd="30dp"
+                android:layout_marginTop="40dp"
+                android:gravity="end">
 
                 <TextView
-                    android:text="Prepare for IELTS"
+                    android:id="@+id/usernameTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Username"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:textColor="@android:color/white" />
 
                 <TextView
-                    android:text="Kick start your IELTS preparation and achieve your goals."
-                    android:textColor="#666666"
-                    android:layout_marginTop="4dp"
+                    android:id="@+id/text1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Achieve more with ELTS"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/white" />
+            </LinearLayout>
+
+            <!-- Main content with margin to push below header -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="40dp"
+                android:padding="16dp">
+
+                <!-- Prepare for IELTS Card -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="4dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:src="@drawable/book_stack"
+                            android:layout_marginBottom="8dp" />
+
+                        <TextView
+                            android:text="Prepare for IELTS"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <TextView
+                            android:text="Kick start your IELTS preparation and achieve your goals."
+                            android:textColor="#666666"
+                            android:layout_marginTop="4dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <Button
+                            android:id="@+id/buttonToPrepare"
+                            android:text="Start preparation"
+                            android:layout_marginTop="12dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="#FFFFFF"
+                            android:backgroundTint="#D50032" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- IELTS Community -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    app:cardElevation="4dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardBackgroundColor="#4A0033">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:id="@+id/icon"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/idea"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignTop="@id/title" />
+
+                        <TextView
+                            android:id="@+id/title"
+                            android:text="ELTS Community"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:layout_toEndOf="@id/icon"
+                            android:layout_marginStart="8dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <TextView
+                            android:id="@+id/description"
+                            android:text="Explore popular questions from our ELTS Community. Get answers you can trust from our ELTS experts."
+                            android:textColor="#FFFFFF"
+                            android:layout_below="@id/title"
+                            android:layout_alignStart="@id/title"
+                            android:layout_marginTop="4dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </RelativeLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Recommended for you -->
+                <TextView
+                    android:text="Recommended for you"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:textColor="#333333"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="12dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
-                <Button
-                    android:text="Start preparation"
-                    android:layout_marginTop="12dp"
+                <!-- Scrollable horizontal list -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerArticles"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#FFFFFF"
-                    android:backgroundTint="#D50032" />
+                    android:paddingStart="16dp"
+                    android:paddingEnd="40dp"
+                    android:clipToPadding="false"
+                    android:clipChildren="false"
+                    android:orientation="horizontal"
+                    android:overScrollMode="never"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="24dp" />
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <!-- IELTS Community -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            app:cardElevation="4dp"
-            app:cardCornerRadius="12dp"
-            app:cardBackgroundColor="#4A0033">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp">
-
-            <ImageView
-                android:id="@+id/icon"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/idea"
-                android:layout_alignParentStart="true"
-                android:layout_alignTop="@id/title" />
-
-            <TextView
-                android:id="@+id/title"
-                android:text="ELTS Community"
-                android:textColor="#FFFFFF"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:layout_toEndOf="@id/icon"
-                android:layout_marginStart="8dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:id="@+id/description"
-                android:text="Explore popular questions from our ELTS Community. Get answers you can trust from our ELTS experts."
-                android:textColor="#FFFFFF"
-                android:layout_below="@id/title"
-                android:layout_alignStart="@id/title"
-                android:layout_marginTop="4dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </RelativeLayout>
-    </androidx.cardview.widget.CardView>
-
-    <!-- Recommended for you -->
-    <TextView
-        android:text="Recommended for you"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:textColor="#333333"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="12dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <!-- Scrollable horizontal list -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerArticles"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingStart="16dp"
-        android:paddingEnd="40dp"
-        android:clipToPadding="false"
-        android:clipChildren="false"
-        android:orientation="horizontal"
-        android:overScrollMode="never"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="24dp" />
-
-</LinearLayout>
+        </LinearLayout>
     </ScrollView>
-    </FrameLayout>
+</FrameLayout>

@@ -9,7 +9,11 @@
         android:id="@+id/menu_explore"
         android:name="com.elts.ExploreFragment"
         android:label="fragment_explore"
-        tools:layout="@layout/fragment_explore" />
+        tools:layout="@layout/fragment_explore" >
+        <action
+            android:id="@+id/action_menu_explore_to_menu_prepare"
+            app:destination="@id/menu_prepare" />
+    </fragment>
     <fragment
         android:id="@+id/menu_prepare"
         android:name="com.elts.PrepareFragment"

@@ -12,6 +12,8 @@
         <item name="postSplashScreenTheme">@style/Theme.ELTS</item> <!-- FIXED -->
     </style>
 
+
+
     <!-- Final app theme -->
     <style name="Theme.ELTS" parent="Base.Theme.ELTS" />
 </resources>

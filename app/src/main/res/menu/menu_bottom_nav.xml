@@ -18,7 +18,7 @@
     </item>
     <item
         android:title="@string/account_icon"
-        android:icon="@drawable/check_education_exam_svgrepo_com"
+        android:icon="@drawable/account_settings_svgrepo_com"
         android:id="@+id/menu_account">
     </item>
 

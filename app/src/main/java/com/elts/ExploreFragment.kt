@@ -7,9 +7,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.elts.models.Article
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 // TODO: Rename parameter arguments, choose names that match
@@ -32,6 +36,8 @@ class ExploreFragment : Fragment() {
     private lateinit var articleAdapter: ArticleAdapter
 
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -40,11 +46,25 @@ class ExploreFragment : Fragment() {
         }
     }
 
+
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_explore, container, false)
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        val usernameTextView = view.findViewById<TextView>(R.id.usernameTextView)
+
+        val goButton = view.findViewById<Button>(R.id.buttonToPrepare)
+        goButton.setOnClickListener {
+            val bottomNav = requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav)
+            bottomNav.selectedItemId = R.id.menu_prepare // ID of the quiz tab in menu
+        }
+
+
+
         // RecyclerView setup
         recyclerView = view.findViewById(R.id.recyclerArticles) // Make sure your XML has this ID
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -61,6 +81,25 @@ class ExploreFragment : Fragment() {
         }
 
         recyclerView.adapter = articleAdapter
+
+
+        if (userId != null) {
+            FirebaseFirestore.getInstance()
+                .collection("users")
+                .document(userId)
+                .get()
+                .addOnSuccessListener { document ->
+                    if (document != null && document.exists()) {
+                        val username = document.getString("username")
+                        usernameTextView.text = "Hello ${username ?: "Unknown"}"
+                    } else {
+                        usernameTextView.text = "Unknown"
+                    }
+                }
+                .addOnFailureListener {
+                    usernameTextView.text = "Error"
+                }
+        }
 
         // Load from Firebase
         val db = FirebaseFirestore.getInstance()
