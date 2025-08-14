@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.elts.models.Quiz
@@ -50,8 +51,10 @@ class PrepareFragment : Fragment() {
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
         quizAdapter = QuizAdapter(quizList) { quiz ->
-            Log.d("QuizClick", "Clicked: ${quiz.title}")
-            // Later: start activity with quiz details
+            val action = PrepareFragmentDirections
+                .actionMenuPrepareToQuizQuestionFragment(quiz.id)
+            findNavController().navigate(action)
+
         }
         recyclerQuiz.adapter = quizAdapter
 
@@ -68,10 +71,11 @@ class PrepareFragment : Fragment() {
                 quizList.clear()
 
                 for (document in snapshot) {
+                    val id = document.id
                     val title = document.getString("title") ?: "Untitled Quiz"
                     val difficulty = document.getString("difficulty") ?: "normal"
 
-                    quizList.add(Quiz(title, difficulty.lowercase()))
+                    quizList.add(Quiz(id, title, difficulty.lowercase()))
                 }
 
                 // Sort quizzes: normal → medium → hard

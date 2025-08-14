@@ -14,7 +14,11 @@
         android:id="@+id/menu_prepare"
         android:name="com.elts.PrepareFragment"
         android:label="fragment_prepare"
-        tools:layout="@layout/fragment_prepare" />
+        tools:layout="@layout/fragment_prepare" >
+        <action
+            android:id="@+id/action_menu_prepare_to_quizQuestionFragment"
+            app:destination="@id/quizQuestionFragment" />
+    </fragment>
     <fragment
         android:id="@+id/menu_results"
         android:name="com.elts.ResultsFragment"
@@ -25,4 +29,12 @@
         android:name="com.elts.AccountFragment"
         android:label="fragment_account"
         tools:layout="@layout/fragment_account" />
+    <fragment
+        android:id="@+id/quizQuestionFragment"
+        android:name="com.elts.QuizQuestionFragment"
+        android:label="QuizQuestionFragment">
+        <argument
+            android:name="quizId"
+            app:argType="string" />
+    </fragment>
 </navigation>
