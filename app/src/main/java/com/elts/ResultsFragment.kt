@@ -1,59 +1,103 @@
 package com.elts
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.elts.databinding.FragmentResultsBinding
+import com.elts.models.UserQuizResult
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 // TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ResultsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ResultsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private var _binding: FragmentResultsBinding? = null
+    private val binding get() = _binding!!
+
+    private val db = FirebaseFirestore.getInstance()
+    private val currentUser = FirebaseAuth.getInstance().currentUser
+
+    private val quizResults = mutableListOf<UserQuizResult>()
+    private lateinit var adapter: QuizResultAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_results, container, false)
+    ): View {
+        // ✅ Use ViewBinding inflate
+        _binding = FragmentResultsBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ResultsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ResultsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        if (currentUser != null) {
+            loadUsername()
+        } else {
+            binding.usernameText.text = "No user logged in"
+        }
+        // RecyclerView setup
+        adapter = QuizResultAdapter(quizResults)
+        binding.resultsRecycler.layoutManager = LinearLayoutManager(requireContext())
+        binding.resultsRecycler.adapter = adapter
+
+        fetchUserQuizHistory()
+    }
+
+    private fun loadUsername() {
+        val userRef = db.collection("users").document(currentUser!!.uid)
+        userRef.get().addOnSuccessListener { doc ->
+            if (doc.exists()) {
+                val username = doc.getString("username") ?: currentUser.email ?: "User"
+                binding.usernameText.text = username
+            } else {
+                binding.usernameText.text = currentUser.email ?: "User"
+            }
+        }.addOnFailureListener {
+            binding.usernameText.text = currentUser.email ?: "User"
+        }
+    }
+
+
+    private fun fetchUserQuizHistory() {
+        val userRef = db.collection("users").document(currentUser!!.uid)
+        userRef.get().addOnSuccessListener { doc ->
+            if (doc.exists()) {
+                val history = doc.get("quizHistory") as? List<Map<String, Any>> ?: emptyList()
+                for (entry in history) {
+                    val quizId = entry["quizId"] as? String ?: continue
+                    val score = (entry["score"] as? Number)?.toInt() ?: 0
+                    val takenAt = entry["takenAt"] as? com.google.firebase.Timestamp
+
+                    // Fetch quiz info for title and difficulty
+                    db.collection("quizzes").document(quizId).get()
+                        .addOnSuccessListener { quizDoc ->
+                            if (quizDoc.exists()) {
+                                val title = quizDoc.getString("title") ?: "Unknown Quiz"
+                                val difficulty = quizDoc.getString("difficulty") ?: "Normal"
+
+                                val result = UserQuizResult(title, difficulty, score, takenAt?.toDate())
+                                quizResults.add(result)
+                                adapter.notifyDataSetChanged()
+                            }
+                        }.addOnFailureListener {
+                            Log.e("ResultFragment", "Failed to get quiz info for $quizId", it)
+                        }
                 }
             }
+        }.addOnFailureListener {
+            Log.e("ResultFragment", "Failed to get user quiz history", it)
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

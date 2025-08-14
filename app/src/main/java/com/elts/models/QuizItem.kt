@@ -12,9 +12,18 @@ data class Quiz(
 data class Question(
     val questionText: String = "",
     val options: List<String> = emptyList(),
-    val answer: String = "",
+    val correctAnswer: String = "",
     val score: Int = 0,
     val explanation: String = "",
     val order: Int = 1,
     )
+
+data class UserQuizResult(
+
+    val title: String,
+    val difficulty: String,
+    val score: Int,
+    val takenAt: java.util.Date?
+)
+
 
