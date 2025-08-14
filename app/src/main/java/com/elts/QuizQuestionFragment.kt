@@ -1,11 +1,15 @@
 package com.elts
 
+import android.app.AlertDialog
 import android.graphics.drawable.InsetDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.RadioButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
@@ -31,7 +35,8 @@ class QuizQuestionFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         quizId = args.quizId
-        Log.d("QuizFragment", "Received quizId = $quizId")    }
+        Log.d("QuizFragment", "Received quizId = $quizId")
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,13 +49,10 @@ class QuizQuestionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         val toolbar = view.findViewById<Toolbar>(R.id.quizToolbar)
-
         val navIcon = ContextCompat.getDrawable(requireContext(), R.drawable.smallarrow)
-        val insetTop = (18 * resources.displayMetrics.density).toInt() // 8dp down
+        val insetTop = (18 * resources.displayMetrics.density).toInt()
         val insetDrawable = InsetDrawable(navIcon, 0, insetTop, 0, 0)
-
         toolbar.navigationIcon = insetDrawable
 
         toolbar.title = "Quiz"
@@ -62,19 +64,48 @@ class QuizQuestionFragment : Fragment() {
         quizId?.let { fetchQuestions(it) }
 
         binding.nextButton.setOnClickListener {
-            if (currentQuestionIndex < questionList.size - 1) {
-                currentQuestionIndex++
-                loadQuestion(currentQuestionIndex)
-            } else {
-                Toast.makeText(requireContext(), "Quiz finished!", Toast.LENGTH_SHORT).show()
+            val selectedId = binding.optionsGroup.checkedRadioButtonId
+            if (selectedId == -1) {
+                Toast.makeText(requireContext(), "Please select an answer", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
+
+            val selectedRadio = view.findViewById<RadioButton>(selectedId)
+            val selectedText = selectedRadio.text.toString()
+
+            val question = questionList[currentQuestionIndex]
+            val correctAnswer = question.answer
+
+            if (selectedText == correctAnswer) {
+                selectedRadio.setBackgroundResource(R.drawable.correct_option_bg)
+                goToNextQuestion()
+            } else {
+                selectedRadio.setBackgroundResource(R.drawable.wrong_option_bg)
+
+                val options = listOf(binding.option1, binding.option2, binding.option3, binding.option4)
+                options.firstOrNull { it.text.toString() == correctAnswer }
+                    ?.setBackgroundResource(R.drawable.correct_option_bg)
+
+                showIncorrectDialog(correctAnswer, question.explanation)
+            }
+        }
+    }
+
+    private fun goToNextQuestion() {
+        if (currentQuestionIndex < questionList.size - 1) {
+            currentQuestionIndex++
+            loadQuestion(currentQuestionIndex)
+        } else {
+            Toast.makeText(requireContext(), "Quiz finished!", Toast.LENGTH_SHORT).show()
+            // Optional: Navigate to results fragment
+            // findNavController().navigate(R.id.action_quiz_to_results)
         }
     }
 
     private fun fetchQuestions(quizId: String) {
         db.collection("quizzes")
             .document(quizId)
-            .collection("questions") // subcollection
+            .collection("questions")
             .get()
             .addOnSuccessListener { documents ->
                 if (!documents.isEmpty) {
@@ -82,7 +113,6 @@ class QuizQuestionFragment : Fragment() {
                     for (doc in documents) {
                         val question = doc.toObject(Question::class.java)
                         Log.d("QuizFragment", "Loaded question: ${question.questionText}")
-
                         questionList.add(question)
                     }
                     loadQuestion(0)
@@ -103,31 +133,38 @@ class QuizQuestionFragment : Fragment() {
         binding.questionNumberText.text = "Question ${index + 1} / ${questionList.size}"
         binding.questionText.text = question.questionText
 
-        val optionButtons = listOf(
-            binding.option1Button,
-            binding.option2Button,
-            binding.option3Button,
-            binding.option4Button
-        )
-
+        val optionButtons = listOf(binding.option1, binding.option2, binding.option3, binding.option4)
         for (i in optionButtons.indices) {
             optionButtons[i].text = question.options.getOrNull(i) ?: ""
             optionButtons[i].isEnabled = question.options.getOrNull(i) != null
+            optionButtons[i].setBackgroundResource(R.drawable.default_option_bg) // Reset bg
         }
+
+        binding.optionsGroup.clearCheck()
+    }
+
+    private fun showIncorrectDialog(correctAnswer: String, explanation: String) {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_incorrect_answer, null)
+        val dialog = AlertDialog.Builder(requireContext(), R.drawable.bg_white_top_rounded)
+            .setView(dialogView)
+            .setCancelable(false)
+            .create()
+
+        dialogView.findViewById<TextView>(R.id.correctAnswerText).text =
+            "The correct answer is: $correctAnswer"
+
+        dialogView.findViewById<TextView>(R.id.explanationText).text = explanation
+
+        dialogView.findViewById<Button>(R.id.nextButton).setOnClickListener {
+            dialog.dismiss()
+            goToNextQuestion()
+        }
+
+        dialog.show()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    companion object {
-        private const val ARG_QUIZ_ID = "quiz_id"
-
-        fun newInstance(quizId: String) = QuizQuestionFragment().apply {
-            arguments = Bundle().apply {
-                putString(ARG_QUIZ_ID, quizId)
-            }
-        }
     }
 }
